@@ -4,7 +4,7 @@
 FROM cm2network/steamcmd:root as build_stage
 
 ENV STEAMAPPID 294420
-ENV STEAMAPP 7days
+ENV STEAMAPP 7DaysToDieServer
 ENV STEAMAPPDIR "${HOMEDIR}/7DaysToDieServer"
 # ENV DLURL https://raw.githubusercontent.com/CM2Walki/CSGO
 
@@ -17,7 +17,7 @@ RUN set -x \
         lib32z1=1:1.2.11.dfsg-2+deb11u2 \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	# Add entry script
-	&& wget --max-redirect=30 "${DLURL}/master/etc/entry.sh" -O "${HOMEDIR}/entry.sh" \
+	# && wget --max-redirect=30 "${DLURL}/master/etc/entry.sh" -O "${HOMEDIR}/entry.sh" \
 	&& { \
 		echo '@ShutdownOnFailedCommand 1'; \
 		echo '@NoPromptForPassword 1'; \
@@ -32,29 +32,6 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/* 
 
 FROM build_stage AS bullseye-base
-
-ENV SRCDS_FPSMAX=300 \
-	SRCDS_TICKRATE=128 \
-	SRCDS_PORT=27015 \
-	SRCDS_TV_PORT=27020 \
-	SRCDS_CLIENT_PORT=27005 \
-	SRCDS_NET_PUBLIC_ADDRESS="0" \
-	SRCDS_IP="0" \
-	SRCDS_LAN="0" \
-	SRCDS_MAXPLAYERS=14 \
-	SRCDS_TOKEN=0 \
-	SRCDS_RCONPW="changeme" \
-	SRCDS_PW="changeme" \
-	SRCDS_STARTMAP="de_dust2" \
-	SRCDS_REGION=3 \
-	SRCDS_MAPGROUP="mg_active" \
-	SRCDS_GAMETYPE=0 \
-	SRCDS_GAMEMODE=1 \
-	SRCDS_HOSTNAME="New \"${STEAMAPP}\" Server" \
-	SRCDS_WORKSHOP_START_MAP=0 \
-	SRCDS_HOST_WORKSHOP_COLLECTION=0 \
-	SRCDS_WORKSHOP_AUTHKEY="" \
-	ADDITIONAL_ARGS=""
 
 # Switch to user
 USER ${USER}
