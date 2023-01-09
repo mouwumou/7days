@@ -6,7 +6,7 @@ FROM cm2network/steamcmd:root as build_stage
 ENV STEAMAPPID 294420
 ENV STEAMAPP 7DaysToDieServer
 ENV STEAMAPPDIR "${HOMEDIR}/7DaysToDieServer"
-# ENV DLURL https://raw.githubusercontent.com/CM2Walki/CSGO
+ENV DLURL https://raw.githubusercontent.com/mouwumou/7days
 
 RUN set -x \
 	# Install, update & upgrade packages
@@ -17,7 +17,7 @@ RUN set -x \
         lib32z1=1:1.2.11.dfsg-2+deb11u2 \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	# Add entry script
-	# && wget --max-redirect=30 "${DLURL}/master/etc/entry.sh" -O "${HOMEDIR}/entry.sh" \
+	&& wget --max-redirect=30 "${DLURL}/main/entry.sh" -O "${HOMEDIR}/entry.sh" \
 	&& { \
 		echo '@ShutdownOnFailedCommand 1'; \
 		echo '@NoPromptForPassword 1'; \
@@ -30,6 +30,8 @@ RUN set -x \
 	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${STEAMAPPDIR}" "${HOMEDIR}/${STEAMAPP}_update.txt" \
 	# Clean up
 	&& rm -rf /var/lib/apt/lists/* 
+
+VOLUME ${STEAMAPPDIR}
 
 FROM build_stage AS bullseye-base
 
