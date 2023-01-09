@@ -6,7 +6,8 @@ FROM cm2network/steamcmd:root as build_stage
 ENV STEAMAPPID 294420
 ENV STEAMAPP 7DaysToDieServer
 ENV STEAMAPPDIR "${HOMEDIR}/7DaysToDieServer"
-ENV DLURL https://raw.githubusercontent.com/mouwumou/7days
+
+COPY entry.sh ${HOMEDIR}/entry.sh
 
 RUN set -x \
 	# Install, update & upgrade packages
@@ -17,7 +18,6 @@ RUN set -x \
         lib32z1=1:1.2.11.dfsg-2+deb11u2 \
 	&& mkdir -p "${STEAMAPPDIR}" \
 	# Add entry script
-	&& wget --max-redirect=30 "${DLURL}/main/entry.sh" -O "${HOMEDIR}/entry.sh" \
 	&& { \
 		echo '@ShutdownOnFailedCommand 1'; \
 		echo '@NoPromptForPassword 1'; \
